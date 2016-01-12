@@ -40,6 +40,26 @@ namespace Oki
             get { return _texture; }
             set { _texture = value; }
         }
+        public void moveRight()
+        {
+            movingdir.X = 4;
+            transition = 0;
+        }
+        public void moveLeft()
+        {
+            movingdir.X = -4;
+            transition = 0;
+        }
+        public void moveUp()
+        {
+            movingdir.Y = -4;
+            transition = 0;
+        }
+        public void moveDown()
+        {
+            movingdir.Y = 4;
+            transition = 0;
+        }
         public void Update(int[,] world)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Right)&&moving==false)
@@ -47,8 +67,7 @@ namespace Oki
                 if(world[((int)_worldpos.X)+1,(int)_worldpos.Y]!=3)
                 {
                     moving = true;
-                    movingdir.X = 4;
-                    transition = 0;
+                    moveRight();
                 }
                 
             }
@@ -57,8 +76,7 @@ namespace Oki
                 if (world[((int)_worldpos.X) - 1, (int)_worldpos.Y] != 3)
                 {
                     moving = true;
-                    movingdir.X = -4;
-                    transition = 0;
+                    moveLeft();
                 }
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Up) && moving == false)
@@ -66,8 +84,7 @@ namespace Oki
                 if (world[((int)_worldpos.X), ((int)_worldpos.Y)-1] != 3)
                 {
                     moving = true;
-                    movingdir.Y = -4;
-                    transition = 0;
+                    moveUp();
                 }
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Down) && moving == false)
@@ -75,8 +92,7 @@ namespace Oki
                 if (world[((int)_worldpos.X), ((int)_worldpos.Y) + 1] != 3)
                 {
                     moving = true;
-                    movingdir.Y = 4;
-                    transition = 0;
+                    moveDown();
                 }
             }
             if(moving==true)

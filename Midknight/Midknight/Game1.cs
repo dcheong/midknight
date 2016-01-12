@@ -22,6 +22,7 @@ namespace Oki
         Player player = new Player();
         Texture2D genTile;
         Texture2D playerTexture;
+        Texture2D rockTexture;
         int[,] world;
         List<Texture2D> textureList = new List<Texture2D>();
         SpriteFont sFont;
@@ -50,7 +51,7 @@ namespace Oki
             textureList.Add(genTile);
             textureList.Add(genTile);
             textureList.Add(genTile);
-            textureList.Add(playerTexture);
+            textureList.Add(rockTexture);
 
             
         }
@@ -65,6 +66,7 @@ namespace Oki
             spriteBatch = new SpriteBatch(GraphicsDevice);
             genTile = Content.Load<Texture2D>("tile");
             playerTexture = Content.Load<Texture2D>("player");
+            rockTexture = Content.Load<Texture2D>("rock");
             player.Tex = playerTexture;
 
             sFont = Content.Load<SpriteFont>("SpriteFont1");
@@ -112,12 +114,17 @@ namespace Oki
             String playerpos = player.Pos.X.ToString() + " " + player.Pos.Y.ToString();
             String worldplayerpos = player._worldpos.X.ToString() + " " + player._worldpos.Y.ToString();
 
+            //Draw tilemap
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.get_transformation(graphics.GraphicsDevice));
             drawWorld(spriteBatch, world, textureList);
             spriteBatch.End();
+
+            //Draw Player
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.get_transformation(graphics.GraphicsDevice));
             player.Draw(spriteBatch);
             spriteBatch.End();
+
+            //Draw HUD or overlays
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null);
             //spriteBatch.DrawString(sFont,playerpos,Vector2.Zero,Color.White);
             spriteBatch.DrawString(sFont, worldplayerpos, Vector2.Zero, Color.White);
