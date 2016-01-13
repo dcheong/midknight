@@ -35,38 +35,32 @@ namespace Oki
             
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+
             cam.Pos = new Vector2(0.0f, 00.0f);
             player.Pos = new Vector2(0.0f, 0.0f);
             base.Initialize();
 
 
             //Create world
-            world = new int[11, 11];
             string path = "world1.txt";
             using (StreamReader sr = new StreamReader(path))
             {
                 int count = 0;
+                int worldsize = int.Parse(sr.ReadLine().ToString());
+                Console.Out.Write("WORLDSIZE::" + worldsize);
+                world = new int[worldsize, worldsize];
                 while (sr.Peek() >=0)
                 {
                     string line = sr.ReadLine();
-                    Console.Out.WriteLine(line);
-                    for (int i = 0; i < 11; i++)
+                    for (int i = 0; i < worldsize; i++)
                     {
                         world[i, count] = int.Parse(line[i].ToString());
                     }
                     count++;
                 }
             }
-            Console.Out.Write(world[0, 0]);
             
             textureList.Add(genTile);
             textureList.Add(genTile);
@@ -76,10 +70,7 @@ namespace Oki
             
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
+
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.

@@ -40,34 +40,15 @@ namespace Oki
             get { return _texture; }
             set { _texture = value; }
         }
-        public void moveRight()
-        {
-            movingdir.X = 4;
-            transition = 0;
-        }
-        public void moveLeft()
-        {
-            movingdir.X = -4;
-            transition = 0;
-        }
-        public void moveUp()
-        {
-            movingdir.Y = -4;
-            transition = 0;
-        }
-        public void moveDown()
-        {
-            movingdir.Y = 4;
-            transition = 0;
-        }
         public void Update(int[,] world)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Right)&&moving==false)
+            if (Keyboard.GetState().IsKeyDown(Keys.Right) && moving == false)
             {
                 if(world[((int)_worldpos.X)+1,(int)_worldpos.Y]!=3)
                 {
                     moving = true;
-                    moveRight();
+                    movingdir.X=4;
+                    transition = 0;
                 }
                 
             }
@@ -76,7 +57,8 @@ namespace Oki
                 if (world[((int)_worldpos.X) - 1, (int)_worldpos.Y] != 3)
                 {
                     moving = true;
-                    moveLeft();
+                    movingdir.X=-4;
+                    transition = 0;
                 }
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Up) && moving == false)
@@ -84,7 +66,8 @@ namespace Oki
                 if (world[((int)_worldpos.X), ((int)_worldpos.Y)-1] != 3)
                 {
                     moving = true;
-                    moveUp();
+                    movingdir.Y=-4;
+                    transition = 0;
                 }
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Down) && moving == false)
@@ -92,7 +75,8 @@ namespace Oki
                 if (world[((int)_worldpos.X), ((int)_worldpos.Y) + 1] != 3)
                 {
                     moving = true;
-                    moveDown();
+                    movingdir.Y=4;
+                    transition = 0;
                 }
             }
             if(moving==true)
