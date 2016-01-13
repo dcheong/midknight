@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -47,7 +48,26 @@ namespace Oki
             player.Pos = new Vector2(0.0f, 0.0f);
             base.Initialize();
 
-            world = new int[,] { { 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+
+            //Create world
+            world = new int[11, 11];
+            string path = "world1.txt";
+            using (StreamReader sr = new StreamReader(path))
+            {
+                int count = 0;
+                while (sr.Peek() >=0)
+                {
+                    string line = sr.ReadLine();
+                    Console.Out.WriteLine(line);
+                    for (int i = 0; i < 11; i++)
+                    {
+                        world[i, count] = int.Parse(line[i].ToString());
+                    }
+                    count++;
+                }
+            }
+            Console.Out.Write(world[0, 0]);
+            
             textureList.Add(genTile);
             textureList.Add(genTile);
             textureList.Add(genTile);
