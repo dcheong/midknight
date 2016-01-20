@@ -21,13 +21,11 @@ namespace Oki
         SpriteBatch spriteBatch;
         Camera2d cam = new Camera2d();
         Player player = new Player();
-        Texture2D genTile;
         Texture2D playerTexture;
-        Texture2D rockTexture;
-        int[,] world;
         List<Texture2D> textureList = new List<Texture2D>();
         SpriteFont sFont;
-        
+        int[,] world1;
+        int[,] world1top;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -39,19 +37,41 @@ namespace Oki
         {
 
             cam.Pos = new Vector2(0.0f, 00.0f);
-            player.Pos = new Vector2(0.0f, 0.0f);
+            player.Pos = new Vector2(64.0f, 64.0f);
             base.Initialize();
 
 
             //Create world
-            string path = "world1.txt";
+            string levelpath = "world1.txt";
+            string levelpath2 = "world1top.txt";
+            world1 = readWorld(levelpath);
+            world1top = readWorld(levelpath2);
+            string texturepath = "textures.txt";
+            readTextures(texturepath);
+
+            
+        }
+        public void readTextures(string path)
+        {
+            using (StreamReader sr = new StreamReader(path))
+            {
+                while (sr.Peek() >=0)
+                {
+                    string line = sr.ReadLine();
+                    textureList.Add(this.Content.Load<Texture2D>(line));
+                }
+            }
+        }
+        public int[,] readWorld(string path)
+        {
+            int[,] world;
             using (StreamReader sr = new StreamReader(path))
             {
                 int count = 0;
                 int worldsize = int.Parse(sr.ReadLine().ToString());
                 Console.Out.Write("WORLDSIZE::" + worldsize);
                 world = new int[worldsize, worldsize];
-                while (sr.Peek() >=0)
+                while (sr.Peek() >= 0)
                 {
                     string line = sr.ReadLine();
                     for (int i = 0; i < worldsize; i++)
@@ -61,51 +81,30 @@ namespace Oki
                     count++;
                 }
             }
-            
-            textureList.Add(genTile);
-            textureList.Add(genTile);
-            textureList.Add(genTile);
-            textureList.Add(rockTexture);
-
-            
+            return world;
         }
-
-
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            genTile = Content.Load<Texture2D>("tile");
-            playerTexture = Content.Load<Texture2D>("player");
+/*            genTile = Content.Load<Texture2D>("tile");
+            
             rockTexture = Content.Load<Texture2D>("rock");
+ * */
+            playerTexture = Content.Load<Texture2D>("player");
             player.Tex = playerTexture;
 
             sFont = Content.Load<SpriteFont>("SpriteFont1");
-            // TODO: use this.Content to load your game content here
         }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
-
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
  
-            // TODO: Add your update logic here
-            player.Update(world);
+            player.Update(world1);
             cam.Pos = player._pos;
             if (Keyboard.GetState().IsKeyDown(Keys.W))
                 cam.Zoom = cam.Zoom + 0.1f;
@@ -113,11 +112,6 @@ namespace Oki
                 cam.Zoom = cam.Zoom - 0.1f;
             base.Update(gameTime);
         }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -127,7 +121,8 @@ namespace Oki
 
             //Draw tilemap
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.get_transformation(graphics.GraphicsDevice));
-            drawWorld(spriteBatch, world, textureList);
+            drawWorld(spriteBatch, world1, textureList);
+            drawWorld(spriteBatch, world1top, textureList);
             spriteBatch.End();
 
             //Draw Player
@@ -150,7 +145,10 @@ namespace Oki
                 for(int j = 0; j<w.GetLength(1);j++)
                 {
                     Vector2 pos = new Vector2(i*32,j*32);
-                    sb.Draw(texList[w[i,j]],pos,Color.White);
+                    if (w[i, j] != 0)
+                    {
+                        sb.Draw(texList[w[i, j]], pos, Color.White);
+                    }
                 }
             }
         }

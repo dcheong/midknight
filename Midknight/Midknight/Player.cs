@@ -18,6 +18,7 @@ namespace Oki
         public Vector2 _worldpos;
         public Texture2D _texture;
         public bool moving;
+        public bool snapped;
         public Vector2 movingdir;
         public int transition;
         public int steps;
@@ -26,6 +27,7 @@ namespace Oki
         {
             _worldpos = Vector2.Zero;
             _pos = Vector2.Zero;
+            snapped = true;
             movingdir = Vector2.Zero;
             moving = false;
             steps = 8;
@@ -35,14 +37,26 @@ namespace Oki
             get { return _pos; }
             set { _pos = value; }
         }
+        public Vector2 worldPos
+        {
+            get { return _worldpos; }
+            set { _worldpos = value;}
+        }
         public Texture2D Tex
         {
             get { return _texture; }
             set { _texture = value; }
         }
-        public void Update(int[,] world)
+        public void calcTile()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Right) && moving == false)
+            float newx = (float)Math.Round(_pos.X/32);
+            float newy = (float)Math.Round(_pos.Y/32);
+            worldPos = (new Vector2(newx, newy));
+        }
+        public void Update(int[,] world)
+        {   calcTile();
+            
+          if (Keyboard.GetState().IsKeyDown(Keys.Right) && moving == false)
             {
                 if(world[((int)_worldpos.X)+1,(int)_worldpos.Y]!=3)
                 {
@@ -79,6 +93,7 @@ namespace Oki
                     transition = 0;
                 }
             }
+ 
             if(moving==true)
             {
                 if(transition<steps)
@@ -88,14 +103,13 @@ namespace Oki
                 }
                 else
                 {
-                    _worldpos.X = _pos.X / 32;
-                    _worldpos.Y = _pos.Y / 32;
+                    calcTile();
                     moving = false;
                     movingdir = Vector2.Zero;
                     
                 }
             }
-        }
+            }
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, _pos, Color.White);
