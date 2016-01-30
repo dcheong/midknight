@@ -1,6 +1,6 @@
 using System;
 
-namespace Oki
+namespace Midknight
 {
 #if WINDOWS || XBOX
     static class Program

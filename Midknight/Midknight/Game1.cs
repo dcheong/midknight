@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace Oki
+namespace Midknight
 {
     /// <summary>
     /// This is the main type for your game
@@ -25,7 +25,6 @@ namespace Oki
         List<Texture2D> textureList = new List<Texture2D>();
         SpriteFont sFont;
         int[,] world1;
-        int[,] world1top;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -43,9 +42,7 @@ namespace Oki
 
             //Create world
             string levelpath = "world1.txt";
-            string levelpath2 = "world1top.txt";
             world1 = readWorld(levelpath);
-            world1top = readWorld(levelpath2);
             string texturepath = "textures.txt";
             readTextures(texturepath);
 
@@ -91,7 +88,7 @@ namespace Oki
             
             rockTexture = Content.Load<Texture2D>("rock");
  * */
-            playerTexture = Content.Load<Texture2D>("player");
+            playerTexture = Content.Load<Texture2D>("player1");
             player.Tex = playerTexture;
 
             sFont = Content.Load<SpriteFont>("SpriteFont1");
@@ -122,7 +119,6 @@ namespace Oki
             //Draw tilemap
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, cam.get_transformation(graphics.GraphicsDevice));
             drawWorld(spriteBatch, world1, textureList);
-            drawWorld(spriteBatch, world1top, textureList);
             spriteBatch.End();
 
             //Draw Player
